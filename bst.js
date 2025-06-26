@@ -334,30 +334,7 @@ function genRandTree(quantity = 20, max = 100) {
 
 const myTree = genRandTree();
 
-myTree.insert(105);
-myTree.insert(250);
-myTree.insert(300);
-myTree.insert(345);
-myTree.insert(410);
 
-console.log(myTree.isBalanced());
-
-console.log(myTree.levelOrderArray());
-console.log(myTree.preOrderArray());
-console.log(myTree.postOrderArray());
-console.log(myTree.inOrderArray());
-
-myTree.rebalance();
-
-console.log(myTree.root);
-prettyPrint(myTree.root);
-
-console.log(myTree.isBalanced());
-
-console.log(myTree.levelOrderArray());
-console.log(myTree.preOrderArray());
-console.log(myTree.postOrderArray());
-console.log(myTree.inOrderArray());
 
 
 
