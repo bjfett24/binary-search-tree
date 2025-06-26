@@ -178,6 +178,9 @@ class Tree {
     }
 
     heightNode(node) {
+        if (node === null) {
+            return null;
+        }
         if (node.left === null && node.right === null) {
             return 0;
         } else if (node.left === null) {
@@ -200,21 +203,102 @@ class Tree {
         if (this.find(value) == null) {
             return null;
         } else {
-            return this.heightNode(this.find(value));
+            return this.depthNode(this.root, value);
         }
     };
 
-    depthNode(node) {
+    depthNode(node, value) {
+        if (this.root.data === value) {
+            return 0;
+        }
+        if (node.data < value) {
+            return this.depthNode(node.right, value) + 1;
+        } else if (node.data > value) {
+            return this.depthNode(node.left, value) + 1;
+        } else if (node.data === value) {
+            return 0;
+        }
+    }
+    
 
+    isBalanced() {
+        return this.isBalancedNode(this.root);
     };
 
-    isBalanced() {};
+    isBalancedNode(node) {
+        if (node === null) {
+            return true;
+        }
+        if (node.left === null || node.right === null) {
+            if (this.heightNode(node.left) > 0 || this.heightNode(node.right) > 0) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            const leftBalance = this.isBalancedNode(node.left);
+            const rightBalance = this.isBalancedNode(node.right);
+            // console.log(node.data);
+            // console.log(this.height())
+            // console.log(Math.abs(this.height(node.left) - this.height(node.right)))
+            return (
+                leftBalance && 
+                rightBalance && 
+                (Math.abs(this.heightNode(node.left) - this.heightNode(node.right)) <= 1)
+            );
+        } 
+    };
 
-    rebalance() {};
+    rebalance() {
+        const treeArr = this.inOrderArray();
+        this.root = this.buildTree(treeArr);
+    };
 
+    levelOrderArray() {
+        const node = this.root;
+        if (node === null) return;
 
+        const queue = [];
+        const arr = [];
+        queue.push(node);
 
+        while (queue.length > 0) {
+            let current = queue.at(0);
+            arr.push(current.data);
+            if (current.left !== null) {
+                queue.push(current.left)
+            } 
+            if (current.right !== null) {
+                queue.push(current.right);
+            }
+            queue.shift();
+        }
+        return arr;
+    }
 
+    preOrderArray(node = this.root, arr = []) {
+        if (node == null) return;
+        arr.push(node.data);
+        this.preOrderArray(node.left, arr); 
+        this.preOrderArray(node.right, arr);
+        return arr;
+    }
+
+    inOrderArray(node = this.root, arr = []) {
+        if (node == null) return;
+        this.inOrderArray(node.left, arr); 
+        arr.push(node.data);
+        this.inOrderArray(node.right, arr);
+        return arr;
+    }
+
+    postOrderArray(node = this.root, arr = []) {
+        if (node == null) return;
+        this.postOrderArray(node.left, arr); 
+        this.postOrderArray(node.right, arr);
+        arr.push(node.data);
+        return arr;
+    }
 }
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
@@ -230,41 +314,72 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
     }
   };
   
+  
 
-const myTree = new Tree([0, 4, 3, 6, 5, 7, 8, 7, 6, 5, 4]);
-myTree.insert(1);
-myTree.deleteItem(3);
-myTree.deleteItem(4);
-myTree.insert(2);
-myTree.insert(3);
-myTree.insert(4);
-myTree.insert(9);
+
+  function randomArr(quantity = 20, max = 100) {
+    const arr = []
+    for (let i = 0; i < quantity; i++) {
+        arr.push(Math.floor(Math.random() * max));
+    }
+    return arr;
+}
+
+function genRandTree(quantity = 20, max = 100) {
+    const arr = randomArr();
+    const myTree = new Tree(arr);
+    return myTree;
+}
+
+
+const myTree = genRandTree();
+
+myTree.insert(105);
+myTree.insert(250);
+myTree.insert(300);
+myTree.insert(345);
+myTree.insert(410);
+
+console.log(myTree.isBalanced());
+
+console.log(myTree.levelOrderArray());
+console.log(myTree.preOrderArray());
+console.log(myTree.postOrderArray());
+console.log(myTree.inOrderArray());
+
+myTree.rebalance();
+
 console.log(myTree.root);
 prettyPrint(myTree.root);
-myTree.levelOrder(double);
-myTree.preOrder(add5);
-myTree.postOrder(square);
-console.log(myTree.root);
-prettyPrint(myTree.root);
+
+console.log(myTree.isBalanced());
+
+console.log(myTree.levelOrderArray());
+console.log(myTree.preOrderArray());
+console.log(myTree.postOrderArray());
+console.log(myTree.inOrderArray());
 
 
 
 
-function double(num) {
-    return num * 2;
-}
 
-function add5(num) {
-    return num + 5;
-}
 
-function absSub10(num) {
-    return Math.abs(num - 10);
-}
 
-function square(num) {
-    return num ** 2;
-}
+// function double(num) {
+//     return num * 2;
+// }
+
+// function add5(num) {
+//     return num + 5;
+// }
+
+// function absSub10(num) {
+//     return Math.abs(num - 10);
+// }
+
+// function square(num) {
+//     return num ** 2;
+// }
 
 
 
